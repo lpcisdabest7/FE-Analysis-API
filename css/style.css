@@ -362,15 +362,465 @@ body {
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 0 8px 18px rgba(0, 0, 0, 0.3);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Hide mobile toggle by default */
+#mobile-ui-toggle {
+    display: none;
+}
+
+/* Mobile First Approach - Base styles for mobile */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+    
     #ui-overlay {
-        width: calc(100% - 40px);
-        margin: 10px 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        overflow-y: auto;
+        z-index: 1001;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    #three-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+    }
+    
+    /* Toggle button for mobile UI */
+    #mobile-ui-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1002;
+        background: rgba(102, 126, 234, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    #mobile-ui-toggle:hover {
+        background: rgba(102, 126, 234, 1);
+        transform: scale(1.1);
+    }
+    
+    #mobile-ui-toggle.active {
+        background: rgba(244, 67, 54, 0.9);
+    }
+    
+    /* Hide UI overlay by default on mobile */
+    #ui-overlay.hidden {
+        transform: translateX(-100%);
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    #status h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    
+    #connection-status, #current-action {
+        padding: 8px 12px;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    #action-history {
+        flex: 1;
+        margin: 10px 0;
+    }
+    
+    #action-history h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    
+    #action-list {
+        max-height: 150px;
+        font-size: 13px;
+    }
+    
+    #text-input-section {
+        margin: 10px 0;
+        padding: 12px;
+    }
+    
+    #text-input-section h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    #text-input-group {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    #text-input {
+        padding: 15px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        border-radius: 12px;
+        min-height: 48px; /* Touch target size */
+        -webkit-appearance: none; /* Remove iOS styling */
+        -webkit-border-radius: 12px; /* iOS specific border radius */
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+        resize: none;
+    }
+    
+    #text-input:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4), 0 4px 25px rgba(0, 0, 0, 0.2);
+        border-color: rgba(102, 126, 234, 0.8);
+        transform: translateY(-2px);
+        -webkit-transform: translateY(-2px);
+    }
+    
+    #send-text-btn {
+        padding: 15px 20px;
+        font-size: 16px;
+        min-height: 48px;
+        border-radius: 12px;
+    }
+    
+    #text-samples {
+        margin: 12px 0;
+        gap: 8px;
+    }
+    
+    .sample-text-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        min-height: 44px;
+        border-radius: 12px;
+        flex: 1;
+        min-width: calc(50% - 4px);
     }
     
     #controls {
         flex-direction: column;
+        gap: 12px;
+        margin-top: auto;
+    }
+    
+    #controls button {
+        padding: 15px;
+        font-size: 16px;
+        min-height: 48px;
+        border-radius: 12px;
+    }
+    
+    #text-status {
+        font-size: 14px;
+        padding: 10px;
+        margin-top: 8px;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    #ui-overlay {
+        padding: 10px;
+    }
+    
+    #status h2 {
+        font-size: 18px;
+    }
+    
+    .sample-text-btn {
+        font-size: 12px;
+        padding: 10px 12px;
+        min-width: 100%;
+    }
+    
+    #text-samples {
+        flex-direction: column;
+    }
+}
+
+/* Tablet Portrait */
+@media (min-width: 481px) and (max-width: 768px) {
+    #ui-overlay {
+        width: 380px;
+        margin: 15px;
+        max-height: calc(100vh - 30px);
+        overflow-y: auto;
+        position: relative;
+    }
+    
+    #text-input-group {
+        flex-direction: row;
+        align-items: stretch;
+    }
+    
+    #text-input {
+        font-size: 15px;
+        padding: 12px 15px;
+        min-height: 44px;
+        -webkit-appearance: none;
+    }
+    
+    #send-text-btn {
+        padding: 12px 18px;
+        font-size: 15px;
+        white-space: nowrap;
+        min-height: 44px;
+    }
+    
+    .sample-text-btn {
+        font-size: 13px;
+        padding: 10px 14px;
+        min-width: auto;
+        min-height: 40px;
+    }
+    
+    #controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    #controls button {
+        flex: 1;
+        min-width: calc(50% - 5px);
+        min-height: 44px;
+    }
+    
+    /* Tablet-specific touch improvements */
+    #action-list {
+        max-height: 180px;
+    }
+    
+    #text-samples {
+        gap: 10px;
+        justify-content: flex-start;
+    }
+    
+    /* Better scrolling on tablet */
+    #ui-overlay {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    }
+    
+    #ui-overlay::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    #ui-overlay::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+    
+    #ui-overlay::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+    }
+}
+
+/* Tablet Landscape & Small Desktop */
+@media (min-width: 769px) and (max-width: 1024px) {
+    #ui-overlay {
+        width: 400px;
+        margin: 20px;
+    }
+    
+    #text-samples {
+        justify-content: flex-start;
+    }
+    
+    .sample-text-btn {
+        flex: 0 0 auto;
+        min-width: auto;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1025px) {
+    #ui-overlay {
+        width: 420px;
+        margin: 25px;
+    }
+    
+    #action-list {
+        max-height: 250px;
+    }
+    
+    .sample-text-btn:hover {
+        transform: translateY(-1px) scale(1.02);
+    }
+}
+
+/* Landscape Orientation Adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+    #ui-overlay {
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+    }
+    
+    #action-list {
+        max-height: 120px;
+    }
+    
+    #text-input-section {
+        margin: 8px 0;
+    }
+    
+    #text-samples {
+        margin: 8px 0;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    #ui-overlay {
+        backdrop-filter: blur(12px);
+    }
+    
+    button {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    }
+    
+    #ui-overlay {
+        background: rgba(26, 32, 44, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    #text-input {
+        background: rgba(255, 255, 255, 0.95);
+        color: #2d3748;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(0deg); }
+    }
+}
+
+/* Touch Device Optimizations */
+@media (pointer: coarse) {
+    button {
+        min-height: 44px;
+        min-width: 44px;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    .sample-text-btn {
+        padding: 12px 16px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    #text-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: text;
+        user-select: text;
+    }
+    
+    /* Larger touch targets */
+    #controls button {
+        min-height: 48px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    #send-text-btn {
+        min-height: 48px;
+        min-width: 80px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    #mobile-ui-toggle {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+}
+
+/* Virtual Keyboard Support */
+@media (max-width: 480px) {
+    /* Adjust layout when virtual keyboard is shown */
+    .keyboard-open #ui-overlay {
+        height: 50vh;
+        max-height: 50vh;
+        overflow-y: auto;
+        padding-bottom: env(keyboard-inset-height, 0px);
+    }
+    
+    .keyboard-open #text-input-section {
+        margin-bottom: 0;
+    }
+    
+    .keyboard-open #action-history {
+        max-height: 100px;
+        flex: none;
+    }
+}
+
+/* iOS Specific Improvements */
+@supports (-webkit-touch-callout: none) {
+    #text-input {
+        -webkit-appearance: none;
+        -webkit-border-radius: 12px;
+        border-radius: 12px;
+    }
+    
+    button {
+        -webkit-appearance: none;
+        border-radius: inherit;
+    }
+    
+    /* Fix iOS viewport units issue */
+    #ui-overlay {
+        height: -webkit-fill-available;
     }
 }
 

@@ -2,7 +2,10 @@
 class Config {
   constructor() {
     this.API_BASE_URL = this.env("API_BASE_URL", "http://localhost:3000");
-    this.API_BACKEND_URL = this.env("API_BACKEND_URL", "http://localhost:3005");
+    this.API_BACKEND_URL = this.env(
+      "API_BACKEND_URL",
+      "https://3d-model.earnai.art"
+    );
     this.NODE_ENV = this.env("NODE_ENV", "development");
 
     // Animation settings

@@ -10,7 +10,7 @@
     const defaults = {
       NODE_ENV: "development",
       API_BASE_URL: "http://localhost:3000",
-      API_BACKEND_URL: "http://localhost:3005",
+      API_BACKEND_URL: "https://3d-model.earnai.art",
     };
 
     for (const [key, defaultValue] of Object.entries(defaults)) {

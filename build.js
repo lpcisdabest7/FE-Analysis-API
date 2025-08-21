@@ -7,7 +7,8 @@ console.log("🔧 Building for Vercel...");
 
 // Environment variables
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000";
-const API_BACKEND_URL = process.env.API_BACKEND_URL || "http://localhost:3005";
+const API_BACKEND_URL =
+  process.env.API_BACKEND_URL || "https://3d-model.earnai.art";
 const NODE_ENV = process.env.NODE_ENV || "production";
 
 // Generate env.js

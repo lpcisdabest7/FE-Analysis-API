@@ -833,4 +833,19 @@ class Princess3D {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
+
+  updateCanvasSize() {
+    // Get the actual canvas dimensions
+    const canvas = this.renderer.domElement;
+    const rect = canvas.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    // Update camera aspect ratio and renderer size
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(width, height, false);
+
+    config.log(`📱 Canvas resized to: ${width}x${height}`);
+  }
 }

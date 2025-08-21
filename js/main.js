@@ -38,7 +38,13 @@ class PrincessBot {
       textInput: document.getElementById("text-input"),
       sendTextBtn: document.getElementById("send-text-btn"),
       textStatus: document.getElementById("text-status"),
+      uiOverlay: document.getElementById("ui-overlay"),
+      mobileToggle: document.getElementById("mobile-ui-toggle"),
     };
+
+    // Initialize responsive state
+    this.isMobile = window.innerWidth <= 480;
+    this.isUIVisible = !this.isMobile;
 
     // Validate elements
     if (!this.elements.canvas) {
@@ -64,6 +70,9 @@ class PrincessBot {
 
     // Setup event listeners
     this.setupEventListeners();
+
+    // Setup responsive handlers
+    this.setupResponsiveHandlers();
 
     // Update UI
     this.updateConnectionStatus("disconnected");
@@ -146,6 +155,196 @@ class PrincessBot {
     document.addEventListener("click", unlockHandler);
     document.addEventListener("keydown", unlockHandler);
     document.addEventListener("touchstart", unlockHandler);
+  }
+
+  setupResponsiveHandlers() {
+    // Mobile UI toggle
+    if (this.elements.mobileToggle) {
+      this.elements.mobileToggle.addEventListener("click", () => {
+        this.toggleMobileUI();
+      });
+    }
+
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.handleResize();
+      }, 250);
+    });
+
+    // Handle orientation change
+    window.addEventListener("orientationchange", () => {
+      setTimeout(() => {
+        this.handleResize();
+      }, 500);
+    });
+
+    // Close mobile UI when clicking outside
+    document.addEventListener("click", (event) => {
+      if (
+        this.isMobile &&
+        this.isUIVisible &&
+        !this.elements.uiOverlay.contains(event.target) &&
+        !this.elements.mobileToggle.contains(event.target)
+      ) {
+        this.hideMobileUI();
+      }
+    });
+
+    // Handle touch events for better mobile experience
+    if ("ontouchstart" in window) {
+      this.setupTouchHandlers();
+    }
+
+    // Initial responsive setup
+    this.updateResponsiveLayout();
+    this.optimizeForMobile();
+  }
+
+  setupTouchHandlers() {
+    // Prevent double-tap zoom on buttons
+    document.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("touchstart", function (e) {
+        e.preventDefault();
+        this.focus();
+      });
+    });
+
+    // Improve scrolling on mobile
+    if (this.elements.actionList) {
+      this.elements.actionList.addEventListener("touchstart", (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    // Better input handling on mobile
+    if (this.elements.textInput) {
+      this.elements.textInput.addEventListener("focus", () => {
+        // Add keyboard open class for layout adjustments
+        document.body.classList.add("keyboard-open");
+
+        // Scroll input into view on mobile
+        setTimeout(() => {
+          this.elements.textInput.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }, 300);
+      });
+
+      this.elements.textInput.addEventListener("blur", () => {
+        // Remove keyboard open class
+        setTimeout(() => {
+          document.body.classList.remove("keyboard-open");
+        }, 300);
+      });
+    }
+
+    // Handle virtual keyboard resize on mobile
+    if (this.isMobile && window.visualViewport) {
+      window.visualViewport.addEventListener("resize", () => {
+        this.handleVirtualKeyboard();
+      });
+    }
+  }
+
+  toggleMobileUI() {
+    if (this.isUIVisible) {
+      this.hideMobileUI();
+    } else {
+      this.showMobileUI();
+    }
+  }
+
+  showMobileUI() {
+    if (!this.elements.uiOverlay) return;
+
+    this.isUIVisible = true;
+    this.elements.uiOverlay.classList.remove("hidden");
+
+    if (this.elements.mobileToggle) {
+      this.elements.mobileToggle.classList.add("active");
+      this.elements.mobileToggle.innerHTML = "✕";
+      this.elements.mobileToggle.setAttribute("aria-label", "Close UI Panel");
+    }
+  }
+
+  hideMobileUI() {
+    if (!this.elements.uiOverlay) return;
+
+    this.isUIVisible = false;
+    this.elements.uiOverlay.classList.add("hidden");
+
+    if (this.elements.mobileToggle) {
+      this.elements.mobileToggle.classList.remove("active");
+      this.elements.mobileToggle.innerHTML = "☰";
+      this.elements.mobileToggle.setAttribute("aria-label", "Open UI Panel");
+    }
+  }
+
+  handleResize() {
+    const wasMobile = this.isMobile;
+    this.isMobile = window.innerWidth <= 480;
+
+    // If switching between mobile and desktop
+    if (wasMobile !== this.isMobile) {
+      this.updateResponsiveLayout();
+    }
+
+    // Update 3D canvas size
+    if (this.princess3d && this.princess3d.renderer) {
+      this.princess3d.updateCanvasSize();
+    }
+  }
+
+  updateResponsiveLayout() {
+    if (!this.elements.uiOverlay) return;
+
+    if (this.isMobile) {
+      // Mobile layout
+      this.elements.uiOverlay.classList.add("hidden");
+      this.isUIVisible = false;
+
+      if (this.elements.mobileToggle) {
+        this.elements.mobileToggle.style.display = "block";
+        this.elements.mobileToggle.classList.remove("active");
+        this.elements.mobileToggle.innerHTML = "☰";
+      }
+    } else {
+      // Desktop layout
+      this.elements.uiOverlay.classList.remove("hidden");
+      this.isUIVisible = true;
+
+      if (this.elements.mobileToggle) {
+        this.elements.mobileToggle.style.display = "none";
+      }
+    }
+  }
+
+  handleVirtualKeyboard() {
+    if (!window.visualViewport || !this.isMobile) return;
+
+    const viewport = window.visualViewport;
+    const heightDifference = window.innerHeight - viewport.height;
+
+    // If height difference is significant, virtual keyboard is likely open
+    if (heightDifference > 150) {
+      document.body.classList.add("keyboard-open");
+
+      // Adjust UI overlay height
+      if (this.elements.uiOverlay && this.isUIVisible) {
+        this.elements.uiOverlay.style.maxHeight = `${viewport.height * 0.8}px`;
+      }
+    } else {
+      document.body.classList.remove("keyboard-open");
+
+      // Reset UI overlay height
+      if (this.elements.uiOverlay) {
+        this.elements.uiOverlay.style.maxHeight = "";
+      }
+    }
   }
 
   connectToBackend() {
@@ -425,10 +624,52 @@ class PrincessBot {
     }
   }
 
+  // Responsive utilities
+  getDeviceType() {
+    const width = window.innerWidth;
+    if (width <= 480) return "mobile";
+    if (width <= 768) return "tablet-portrait";
+    if (width <= 1024) return "tablet-landscape";
+    return "desktop";
+  }
+
+  isTouchDevice() {
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  }
+
+  // Performance optimization for mobile
+  optimizeForMobile() {
+    if (this.isMobile && this.princess3d) {
+      // Reduce quality for better performance on mobile
+      if (this.princess3d.renderer) {
+        this.princess3d.renderer.setPixelRatio(
+          Math.min(window.devicePixelRatio, 2)
+        );
+      }
+    }
+  }
+
   // Cleanup
   destroy() {
     this.disconnect();
-    // Add any other cleanup here
+
+    // Remove event listeners
+    if (this.elements.mobileToggle) {
+      this.elements.mobileToggle.removeEventListener(
+        "click",
+        this.toggleMobileUI
+      );
+    }
+
+    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("orientationchange", this.handleResize);
+
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener(
+        "resize",
+        this.handleVirtualKeyboard
+      );
+    }
   }
 }
 
