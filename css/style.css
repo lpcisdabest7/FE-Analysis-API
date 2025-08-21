@@ -12,13 +12,13 @@ body {
 }
 
 :root {
-    --primary-500: #667eea;
-    --primary-600: #5a6fe0;
-    --primary-700: #4a5cc4;
-    --success-500: #22c55e;
-    --success-600: #16a34a;
-    --blue-500: #3b82f6;
-    --blue-600: #2563eb;
+    --primary-500: #8ea6ff;
+    --primary-600: #6f8cff;
+    --primary-700: #5f7fea;
+    --success-500: #86efac;
+    --success-600: #4ade80;
+    --blue-500: #93c5fd;
+    --blue-600: #60a5fa;
 }
 
 #container {
@@ -237,7 +237,7 @@ body {
     top: 20px;
     right: 20px;
     z-index: 1002;
-    background: rgba(102, 126, 234, 0.95);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
     color: white;
     border: none;
     border-radius: 50%;
@@ -254,7 +254,7 @@ body {
 }
 
 #mobile-ui-toggle:hover {
-    background: rgba(102, 126, 234, 1);
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
     transform: scale(1.1);
 }
 
@@ -1307,7 +1307,7 @@ button {
 }
 
 #analyze-audio-btn:hover {
-    background: linear-gradient(135deg, #1fb455 0%, #129447 100%);
+    background: linear-gradient(135deg, var(--success-600) 0%, var(--success-600) 100%);
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
 }
@@ -1344,7 +1344,7 @@ button {
 }
 
 .sample-text-btn:hover {
-    background: linear-gradient(135deg, #4b8ef8 0%, #2d6ce9 100%);
+    background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-600) 100%);
     transform: translateY(-2px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
@@ -1366,7 +1366,7 @@ button {
     top: 20px;
     right: 20px;
     z-index: 1002;
-    background: rgba(102, 126, 234, 0.95);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
     color: white;
     border: none;
     border-radius: 50%;
@@ -1384,7 +1384,7 @@ button {
 }
 
 #mobile-ui-toggle:hover {
-    background: rgba(102, 126, 234, 1);
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
     transform: scale(1.1);
 }
 

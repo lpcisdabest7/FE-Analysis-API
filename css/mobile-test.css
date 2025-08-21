@@ -243,7 +243,7 @@
         min-height: 72px;
         
         /* Visual design */
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
         color: white;
         border: none;
         border-radius: 50%;
@@ -296,7 +296,7 @@
         letter-spacing: 0.5px;
         
         /* Visual design */
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
         color: white;
         border-radius: 20px;
         
@@ -341,7 +341,7 @@
         letter-spacing: 0.5px;
         
         /* Visual design */
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: linear-gradient(135deg, var(--success-500) 0%, var(--success-600) 100%);
         color: white;
         border-radius: 20px;
         
@@ -395,7 +395,7 @@
         min-width: calc(50% - 8px);
         
         /* Visual design */
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
         color: white;
         border-radius: 16px;
         
