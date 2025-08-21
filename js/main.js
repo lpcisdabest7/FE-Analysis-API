@@ -30,7 +30,6 @@ class PrincessBot {
     // Get DOM elements
     this.elements = {
       canvas: document.getElementById("three-canvas"),
-      connectionStatus: document.getElementById("connection-status"),
       currentAction: document.getElementById("current-action"),
       actionList: document.getElementById("action-list"),
       connectBtn: document.getElementById("connect-btn"),
@@ -75,7 +74,6 @@ class PrincessBot {
     this.setupResponsiveHandlers();
 
     // Update UI
-    this.updateConnectionStatus("disconnected");
     this.updateCurrentAction("Chờ hành động...");
 
     config.log("✅ Princess Bot initialized successfully!");
@@ -94,7 +92,7 @@ class PrincessBot {
     });
 
     this.apiClient.onStatus((status) => {
-      this.updateConnectionStatus(status);
+      // Connection status functionality removed
     });
   }
 
@@ -226,12 +224,14 @@ class PrincessBot {
         document.body.classList.add("keyboard-open");
 
         // Scroll input into view on mobile
-        setTimeout(() => {
-          this.elements.textInput.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-        }, 300);
+        if (this.isMobile) {
+          setTimeout(() => {
+            this.elements.textInput.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }, 300);
+        }
       });
 
       this.elements.textInput.addEventListener("blur", () => {
@@ -248,6 +248,63 @@ class PrincessBot {
         this.handleVirtualKeyboard();
       });
     }
+
+    // Add swipe gesture support for mobile UI
+    this.setupSwipeGestures();
+  }
+
+  setupSwipeGestures() {
+    if (!this.isMobile || !this.elements.uiOverlay) return;
+
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+
+    const handleTouchStart = (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = false;
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isDragging) {
+        const deltaX = Math.abs(e.touches[0].clientX - startX);
+        const deltaY = Math.abs(e.touches[0].clientY - startY);
+
+        // Start dragging if horizontal movement is significant
+        if (deltaX > 10 && deltaX > deltaY) {
+          isDragging = true;
+        }
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isDragging) {
+        const deltaX = e.changedTouches[0].clientX - startX;
+
+        // Swipe right to close (if UI is open)
+        if (deltaX > 50 && this.isUIVisible) {
+          this.hideMobileUI();
+        }
+        // Swipe left to open (if UI is closed)
+        else if (deltaX < -50 && !this.isUIVisible) {
+          this.showMobileUI();
+        }
+      }
+
+      isDragging = false;
+    };
+
+    // Add touch event listeners to the UI overlay
+    this.elements.uiOverlay.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
+    this.elements.uiOverlay.addEventListener("touchmove", handleTouchMove, {
+      passive: true,
+    });
+    this.elements.uiOverlay.addEventListener("touchend", handleTouchEnd, {
+      passive: true,
+    });
   }
 
   toggleMobileUI() {
@@ -264,29 +321,45 @@ class PrincessBot {
     this.isUIVisible = true;
     this.elements.uiOverlay.classList.remove("hidden");
 
+    // Use requestAnimationFrame to ensure smooth transition
+    requestAnimationFrame(() => {
+      this.elements.uiOverlay.classList.add("visible");
+    });
+
     if (this.elements.mobileToggle) {
       this.elements.mobileToggle.classList.add("active");
       this.elements.mobileToggle.innerHTML = "✕";
       this.elements.mobileToggle.setAttribute("aria-label", "Close UI Panel");
     }
+
+    // Prevent body scroll when UI is open
+    document.body.style.overflow = "hidden";
   }
 
   hideMobileUI() {
     if (!this.elements.uiOverlay) return;
 
     this.isUIVisible = false;
-    this.elements.uiOverlay.classList.add("hidden");
+    this.elements.uiOverlay.classList.remove("visible");
+
+    // Wait for transition to complete before hiding
+    setTimeout(() => {
+      this.elements.uiOverlay.classList.add("hidden");
+    }, 300);
 
     if (this.elements.mobileToggle) {
       this.elements.mobileToggle.classList.remove("active");
       this.elements.mobileToggle.innerHTML = "☰";
       this.elements.mobileToggle.setAttribute("aria-label", "Open UI Panel");
     }
+
+    // Restore body scroll
+    document.body.style.overflow = "";
   }
 
   handleResize() {
     const wasMobile = this.isMobile;
-    this.isMobile = window.innerWidth <= 480;
+    this.isMobile = window.innerWidth <= 768; // Updated breakpoint
 
     // If switching between mobile and desktop
     if (wasMobile !== this.isMobile) {
@@ -297,6 +370,9 @@ class PrincessBot {
     if (this.princess3d && this.princess3d.renderer) {
       this.princess3d.updateCanvasSize();
     }
+
+    // Handle virtual keyboard changes
+    this.handleVirtualKeyboard();
   }
 
   updateResponsiveLayout() {
@@ -305,6 +381,7 @@ class PrincessBot {
     if (this.isMobile) {
       // Mobile layout
       this.elements.uiOverlay.classList.add("hidden");
+      this.elements.uiOverlay.classList.remove("visible");
       this.isUIVisible = false;
 
       if (this.elements.mobileToggle) {
@@ -312,9 +389,15 @@ class PrincessBot {
         this.elements.mobileToggle.classList.remove("active");
         this.elements.mobileToggle.innerHTML = "☰";
       }
+
+      // Reset body scroll
+      document.body.style.overflow = "";
     } else {
       // Desktop layout
-      this.elements.uiOverlay.classList.remove("hidden");
+      this.elements.uiOverlay.classList.remove("hidden", "visible");
+      this.elements.uiOverlay.style.transform = "";
+      this.elements.uiOverlay.style.opacity = "";
+      this.elements.uiOverlay.style.pointerEvents = "";
       this.isUIVisible = true;
 
       if (this.elements.mobileToggle) {
@@ -333,9 +416,13 @@ class PrincessBot {
     if (heightDifference > 150) {
       document.body.classList.add("keyboard-open");
 
-      // Adjust UI overlay height
+      // Adjust UI overlay height and scroll position
       if (this.elements.uiOverlay && this.isUIVisible) {
-        this.elements.uiOverlay.style.maxHeight = `${viewport.height * 0.8}px`;
+        const maxHeight = Math.min(viewport.height * 0.8, 600);
+        this.elements.uiOverlay.style.maxHeight = `${maxHeight}px`;
+
+        // Scroll to top of UI overlay
+        this.elements.uiOverlay.scrollTop = 0;
       }
     } else {
       document.body.classList.remove("keyboard-open");
@@ -349,7 +436,7 @@ class PrincessBot {
 
   connectToBackend() {
     config.log("🔌 Attempting to connect to backend...");
-    this.updateConnectionStatus("connecting");
+    // Connection status functionality removed
 
     // Connect to API backend
     this.apiClient.connect();
@@ -364,7 +451,7 @@ class PrincessBot {
   }
 
   startMockMode() {
-    this.updateConnectionStatus("mock");
+    // Connection status functionality removed
     this.mockGenerator.start((actionData) => {
       this.handleActionReceived(actionData);
     }, config.MOCK_DATA_INTERVAL);
@@ -471,29 +558,8 @@ class PrincessBot {
   }
 
   updateConnectionStatus(status) {
-    if (!this.elements.connectionStatus) return;
-
-    const statusMap = {
-      connecting: { text: "Đang kết nối...", class: "connecting" },
-      connected: { text: "✅ Đã kết nối", class: "connected" },
-      disconnected: { text: "❌ Chưa kết nối", class: "disconnected" },
-      reconnecting: { text: "🔄 Đang kết nối lại...", class: "connecting" },
-      error: { text: "⚠️ Lỗi kết nối", class: "error" },
-      failed: { text: "❌ Kết nối thất bại", class: "error" },
-      mock: { text: "🎭 Chế độ demo", class: "mock" },
-    };
-
-    const statusInfo = statusMap[status] || statusMap["disconnected"];
-
-    this.elements.connectionStatus.textContent = statusInfo.text;
-    this.elements.connectionStatus.className = `connection-status ${statusInfo.class}`;
-
-    // Update connect button
-    if (this.elements.connectBtn) {
-      this.elements.connectBtn.textContent =
-        status === "connected" ? "Đã kết nối" : "Kết nối";
-      this.elements.connectBtn.disabled = status === "connecting";
-    }
+    // Connection status functionality removed
+    return;
   }
 
   updateCurrentAction(action) {
@@ -575,7 +641,7 @@ class PrincessBot {
     if (this.mockGenerator) {
       this.mockGenerator.stop();
     }
-    this.updateConnectionStatus("disconnected");
+    // Connection status functionality removed
   }
 
   async sendTextInput() {

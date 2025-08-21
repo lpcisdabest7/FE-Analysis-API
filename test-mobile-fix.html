@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Fix Test - Princess Bot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-test.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 9999;
+        }
+        .test-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info">
+        <div>Screen: <span id="screen-size"></span></div>
+        <div>Mobile: <span id="is-mobile"></span></div>
+        <div>UI Visible: <span id="ui-visible"></span></div>
+        <div>Toggle Display: <span id="toggle-display"></span></div>
+    </div>
+    
+    <button class="test-button" onclick="toggleDebug()">Toggle Debug</button>
+
+    <div id="container">
+        <!-- Mobile UI Toggle Button -->
+        <button id="mobile-ui-toggle" aria-label="Toggle UI Panel">☰</button>
+        
+        <div id="ui-overlay" class="hidden">
+            <div id="status">
+                <h2>🎯 Princess Action Bot</h2>
+                <div id="current-action">Chờ hành động...</div>
+            </div>
+            
+            <div id="action-history">
+                <h3>📜 Lịch sử hành động:</h3>
+                <ul id="action-list">
+                    <li><strong>Nhảy múa</strong><br><span class="timestamp">10:30:15</span></li>
+                    <li><strong>Vẫy tay</strong><br><span class="timestamp">10:30:10</span></li>
+                </ul>
+            </div>
+            
+            <div id="text-input-section">
+                <h3>💬 Nhập văn bản:</h3>
+                <div id="text-input-group">
+                    <input type="text" id="text-input" placeholder="Nhập lệnh cho công chúa..." />
+                    <button id="send-text-btn">🚀 Gửi lệnh</button>
+                </div>
+                <div id="text-samples">
+                    <small>✨ Ví dụ sáng tạo:</small>
+                    <button class="sample-text-btn" data-text="Nhảy múa">💃 Nhảy múa</button>
+                    <button class="sample-text-btn" data-text="Vẫy tay">👋 Vẫy tay</button>
+                    <button class="sample-text-btn" data-text="Bay lên">🦅 Bay lên</button>
+                    <button class="sample-text-btn" data-text="Quay tròn">🌀 Quay tròn</button>
+                </div>
+            </div>
+            
+            <div id="controls">
+                <button id="connect-btn">🔌 Kết nối</button>
+                <button id="test-action-btn">🎭 Test Animation</button>
+                <button id="settings-btn">⚙️ Cài đặt</button>
+                <button id="help-btn">❓ Trợ giúp</button>
+            </div>
+        </div>
+        
+        <canvas id="three-canvas"></canvas>
+    </div>
+
+    <script>
+        // Simple mobile functionality test
+        let isUIVisible = false;
+        let isMobile = window.innerWidth <= 768;
+        
+        function updateDebug() {
+            document.getElementById('screen-size').textContent = `${window.innerWidth} × ${window.innerHeight}`;
+            document.getElementById('is-mobile').textContent = isMobile;
+            document.getElementById('ui-visible').textContent = isUIVisible;
+            
+            const toggle = document.getElementById('mobile-ui-toggle');
+            if (toggle) {
+                document.getElementById('toggle-display').textContent = toggle.style.display || 'default';
+            }
+        }
+        
+        function toggleMobileUI() {
+            const overlay = document.getElementById('ui-overlay');
+            const toggle = document.getElementById('mobile-ui-toggle');
+            
+            if (!isUIVisible) {
+                // Show UI
+                overlay.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    overlay.classList.add('visible');
+                });
+                toggle.classList.add('active');
+                toggle.innerHTML = '✕';
+                isUIVisible = true;
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Hide UI
+                overlay.classList.remove('visible');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+                toggle.classList.remove('active');
+                toggle.innerHTML = '☰';
+                isUIVisible = false;
+                document.body.style.overflow = '';
+            }
+            
+            updateDebug();
+        }
+        
+        function toggleDebug() {
+            const debug = document.querySelector('.debug-info');
+            debug.style.display = debug.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Initialize
+        if (isMobile) {
+            document.getElementById('ui-overlay').classList.add('hidden');
+            document.getElementById('mobile-ui-toggle').style.display = 'block';
+        } else {
+            document.getElementById('ui-overlay').classList.remove('hidden');
+            document.getElementById('mobile-ui-toggle').style.display = 'none';
+        }
+        
+        // Event listeners
+        document.getElementById('mobile-ui-toggle').addEventListener('click', toggleMobileUI);
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            const wasMobile = isMobile;
+            isMobile = window.innerWidth <= 768;
+            
+            if (wasMobile !== isMobile) {
+                if (isMobile) {
+                    document.getElementById('ui-overlay').classList.add('hidden');
+                    document.getElementById('mobile-ui-toggle').style.display = 'block';
+                } else {
+                    document.getElementById('ui-overlay').classList.remove('hidden');
+                    document.getElementById('mobile-ui-toggle').style.display = 'none';
+                }
+            }
+            
+            updateDebug();
+        });
+        
+        // Update debug info
+        updateDebug();
+        setInterval(updateDebug, 1000);
+        
+        // Test button functionality
+        document.querySelectorAll('button').forEach(btn => {
+            if (btn.id !== 'mobile-ui-toggle') {
+                btn.addEventListener('click', function() {
+                    console.log('Button clicked:', this.textContent);
+                    
+                    // Add visual feedback
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                    
+                    // Handle specific buttons
+                    switch(this.id) {
+                        case 'send-text-btn':
+                            const input = document.getElementById('text-input');
+                            if (input.value.trim()) {
+                                console.log('Sending text:', input.value);
+                                input.value = '';
+                                showNotification('✅ Đã gửi lệnh!');
+                            }
+                            break;
+                        case 'connect-btn':
+                            showNotification('🔌 Đang kết nối...');
+                            break;
+                        case 'test-action-btn':
+                            showNotification('🎭 Test animation...');
+                            break;
+                        case 'settings-btn':
+                            showNotification('⚙️ Mở cài đặt...');
+                            break;
+                        case 'help-btn':
+                            showNotification('❓ Hiển thị trợ giúp...');
+                            break;
+                    }
+                });
+            }
+        });
+        
+        // Sample button functionality
+        document.querySelectorAll('.sample-text-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.dataset.text;
+                document.getElementById('text-input').value = text;
+                showNotification(`📝 Đã chọn: ${text}`);
+            });
+        });
+        
+        // Notification system
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0, 0, 0, 0.9);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                z-index: 10000;
+                animation: fadeInOut 2s ease-in-out;
+            `;
+            
+            // Add animation CSS
+            if (!document.querySelector('#notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes fadeInOut {
+                        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                        20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                        80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                        100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

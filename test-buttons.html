@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test - Princess Bot</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Button Test - Princess Bot</h1>
+    
+    <div class="test-section">
+        <h3>📱 Mobile UI Toggle</h3>
+        <button id="mobile-ui-toggle" aria-label="Toggle UI Panel">☰</button>
+        <p>Mobile toggle button should be visible and styled correctly</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>🎮 Control Buttons</h3>
+        <div id="controls">
+            <button id="connect-btn">Kết nối</button>
+            <button id="test-action-btn">Test Animation</button>
+        </div>
+        <p>Control buttons should have gradient backgrounds and hover effects</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>💬 Text Input Section</h3>
+        <div id="text-input-section">
+            <h3>💬 Nhập văn bản:</h3>
+            <div id="text-input-group">
+                <input type="text" id="text-input" placeholder="Nhập lệnh cho công chúa..." />
+                <button id="send-text-btn">Gửi lệnh</button>
+            </div>
+            <div id="text-samples">
+                <small>Ví dụ sáng tạo:</small>
+                <button class="sample-text-btn" data-text="Nhảy múa">Nhảy múa</button>
+                <button class="sample-text-btn" data-text="Vẫy tay">Vẫy tay</button>
+            </div>
+        </div>
+        <p>Text input and sample buttons should be properly styled</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>📊 Status Indicators</h3>
+        <div id="current-action">Chờ hành động...</div>
+        <p>Current action indicator should show action status</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔧 Test Functions</h3>
+        <button onclick="testMobileToggle()">Test Mobile Toggle</button>
+        <p>Click these buttons to test functionality</p>
+    </div>
+
+    <script>
+        function testMobileToggle() {
+            const toggle = document.getElementById('mobile-ui-toggle');
+            const currentText = toggle.textContent;
+            
+            if (currentText === '☰') {
+                toggle.textContent = '✕';
+                toggle.classList.add('active');
+            } else {
+                toggle.textContent = '☰';
+                toggle.classList.remove('active');
+            }
+        }
+        
+        // Test button interactions
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                console.log('Button clicked:', this.textContent);
+            });
+        });
+        
+        // Test sample buttons
+        document.querySelectorAll('.sample-text-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.dataset.text;
+                document.getElementById('text-input').value = text;
+                console.log('Sample text selected:', text);
+            });
+        });
+    </script>
+</body>
+</html>

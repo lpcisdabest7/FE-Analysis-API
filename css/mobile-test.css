@@ -1,0 +1,879 @@
+/* Basic Mobile Test CSS */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        overflow-x: hidden;
+    }
+    
+    #mobile-ui-toggle {
+        display: block !important;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1002;
+        background: rgba(102, 126, 234, 0.95);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    #ui-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 20px !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        z-index: 1001 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.3s ease-in-out !important;
+        opacity: 1 !important;
+        pointer-events: none !important;
+    }
+    
+    #ui-overlay.visible {
+        transform: translateX(0) !important;
+        pointer-events: all !important;
+    }
+    
+    #ui-overlay.hidden {
+        transform: translateX(-100%) !important;
+        pointer-events: none !important;
+    }
+    
+    #three-canvas {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 1 !important;
+    }
+    
+    #status h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+        text-align: center;
+        color: #333;
+    }
+    
+    #current-action {
+        padding: 12px 16px;
+        font-size: 15px;
+        margin-bottom: 12px;
+        color: #333;
+        background: rgba(102, 126, 234, 0.1);
+        border-radius: 10px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        text-align: center;
+    }
+    
+    #action-history h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        color: #333;
+    }
+    
+    #action-list {
+        max-height: 200px;
+        font-size: 14px;
+        background: rgba(102, 126, 234, 0.05);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        border-radius: 10px;
+        padding: 15px;
+        overflow-y: auto;
+    }
+    
+    #action-list li {
+        color: #333;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        font-size: 14px;
+    }
+    
+    #text-input-section {
+        margin: 15px 0;
+        padding: 20px;
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    #text-input-section h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+    
+    #text-input-group {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    #text-input {
+        padding: 18px;
+        font-size: 16px;
+        border-radius: 12px;
+        min-height: 56px;
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    #send-text-btn {
+        padding: 18px 24px;
+        font-size: 16px;
+        min-height: 56px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #5a6fe0 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    #text-samples {
+        margin: 20px 0;
+        gap: 12px;
+        flex-wrap: wrap;
+        display: flex;
+    }
+    
+    .sample-text-btn {
+        padding: 14px 18px;
+        font-size: 14px;
+        min-height: 48px;
+        border-radius: 10px;
+        flex: 1;
+        min-width: calc(50% - 6px);
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        font-weight: 500;
+        box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+    }
+    
+    #controls {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: auto;
+        display: flex;
+    }
+    
+    #controls button {
+        padding: 18px;
+        font-size: 16px;
+        min-height: 56px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #5a6fe0 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+}
+
+/* ===== MOBILE OPTIMIZED BUTTONS ===== */
+
+/* Base button styles for mobile */
+@media (max-width: 768px) {
+    /* Universal button improvements */
+    button {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+        border: none;
+        border-radius: 16px;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    
+    /* Remove default button styling */
+    button:focus {
+        outline: none;
+    }
+    
+    /* Active state feedback */
+    button:active {
+        transform: scale(0.96);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Focus visible for accessibility */
+    button:focus-visible {
+        outline: 3px solid rgba(102, 126, 234, 0.6);
+        outline-offset: 2px;
+    }
+}
+
+/* ===== MOBILE UI TOGGLE BUTTON ===== */
+@media (max-width: 768px) {
+    #mobile-ui-toggle {
+        display: block !important;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1002;
+        
+        /* Large touch target */
+        width: 72px;
+        height: 72px;
+        min-width: 72px;
+        min-height: 72px;
+        
+        /* Visual design */
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 28px;
+        
+        /* Shadow and depth */
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
+        
+        /* Smooth transitions */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        /* Hover effects */
+        transform: scale(1);
+    }
+    
+    #mobile-ui-toggle:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6);
+    }
+    
+    #mobile-ui-toggle.active {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow: 0 8px 32px rgba(239, 68, 68, 0.4);
+    }
+    
+    #mobile-ui-toggle:active {
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+}
+
+/* ===== CONTROL BUTTONS ===== */
+@media (max-width: 768px) {
+    #controls {
+        flex-direction: column;
+        gap: 16px;
+        margin-top: auto;
+        padding: 0 4px;
+    }
+    
+    #controls button {
+        /* Large touch target */
+        width: 100%;
+        min-height: 64px;
+        padding: 20px 24px;
+        
+        /* Typography */
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        
+        /* Visual design */
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        
+        /* Shadow and depth */
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        
+        /* Hover effects */
+        transform: translateY(0);
+    }
+    
+    #controls button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+    }
+    
+    #controls button:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Disabled state */
+    #controls button:disabled {
+        opacity: 0.6;
+        background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+        transform: none;
+        box-shadow: 0 4px 16px rgba(156, 163, 175, 0.3);
+        cursor: not-allowed;
+    }
+}
+
+/* ===== SEND TEXT BUTTON ===== */
+@media (max-width: 768px) {
+    #send-text-btn {
+        /* Large touch target */
+        width: 100%;
+        min-height: 64px;
+        padding: 20px 24px;
+        
+        /* Typography */
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        
+        /* Visual design */
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 20px;
+        
+        /* Shadow and depth */
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        
+        /* Hover effects */
+        transform: translateY(0);
+    }
+    
+    #send-text-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
+    }
+    
+    #send-text-btn:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    }
+    
+    #send-text-btn:disabled {
+        opacity: 0.6;
+        background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+        transform: none;
+        box-shadow: 0 4px 16px rgba(156, 163, 175, 0.3);
+        cursor: not-allowed;
+    }
+}
+
+/* ===== SAMPLE TEXT BUTTONS ===== */
+@media (max-width: 768px) {
+    #text-samples {
+        margin: 24px 0;
+        gap: 16px;
+        flex-wrap: wrap;
+        display: flex;
+    }
+    
+    .sample-text-btn {
+        /* Large touch target */
+        min-height: 56px;
+        padding: 16px 20px;
+        
+        /* Typography */
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        
+        /* Layout */
+        flex: 1;
+        min-width: calc(50% - 8px);
+        
+        /* Visual design */
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border-radius: 16px;
+        
+        /* Shadow and depth */
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        
+        /* Hover effects */
+        transform: translateY(0);
+    }
+    
+    .sample-text-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+    }
+    
+    .sample-text-btn:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+    }
+    
+    /* Special styling for very small screens */
+    @media (max-width: 480px) {
+        .sample-text-btn {
+            min-width: 100%;
+            margin-bottom: 8px;
+        }
+    }
+}
+
+/* ===== TEXT INPUT OPTIMIZATION ===== */
+@media (max-width: 768px) {
+    #text-input {
+        /* Large touch target */
+        min-height: 64px;
+        padding: 20px 24px;
+        
+        /* Typography */
+        font-size: 18px;
+        font-weight: 500;
+        
+        /* Visual design */
+        border: 3px solid rgba(102, 126, 234, 0.2);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.98);
+        color: #1f2937;
+        
+        /* Focus state */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    #text-input:focus {
+        outline: none;
+        border-color: rgba(102, 126, 234, 0.6);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 32px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    #text-input::placeholder {
+        color: #9ca3af;
+        font-weight: 400;
+    }
+}
+
+/* ===== BUTTON GROUP LAYOUT ===== */
+@media (max-width: 768px) {
+    #text-input-group {
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+    
+    /* Ensure proper spacing between input and button */
+    #text-input {
+        margin-bottom: 0;
+    }
+    
+    #send-text-btn {
+        margin-top: 0;
+    }
+}
+
+/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+@media (max-width: 768px) {
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+        button {
+            border: 2px solid #000;
+        }
+        
+        #text-input {
+            border: 3px solid #000;
+        }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        button, #text-input {
+            transition: none;
+        }
+        
+        button:hover, button:active {
+            transform: none;
+        }
+        
+        #text-input:focus {
+            transform: none;
+        }
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        #text-input {
+            background: rgba(31, 41, 55, 0.98);
+            color: #f9fafb;
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+        
+        #text-input::placeholder {
+            color: #6b7280;
+        }
+    }
+}
+
+/* ===== TOUCH FEEDBACK ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    /* Ripple effect for buttons */
+    button {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s;
+    }
+    
+    button:active::before {
+        width: 200px;
+        height: 200px;
+    }
+    
+    /* Prevent text selection on buttons */
+    button {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    /* Improve touch scrolling */
+    #ui-overlay, #action-list {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+@media (max-width: 768px) {
+    /* Hardware acceleration for smooth animations */
+    button, #text-input {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    
+    /* Optimize transitions */
+    button {
+        will-change: transform, box-shadow;
+    }
+    
+    #text-input {
+        will-change: transform, border-color, box-shadow;
+    }
+}
+
+/* ===== EXTRA SMALL SCREEN OPTIMIZATIONS ===== */
+@media (max-width: 480px) {
+    /* Even larger touch targets for very small screens */
+    button {
+        min-height: 56px;
+        font-size: 16px;
+    }
+    
+    #mobile-ui-toggle {
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        min-height: 80px;
+        font-size: 32px;
+        top: 16px;
+        right: 16px;
+    }
+    
+    #controls button {
+        min-height: 72px;
+        padding: 24px 20px;
+        font-size: 18px;
+        border-radius: 24px;
+    }
+    
+    #send-text-btn {
+        min-height: 72px;
+        padding: 24px 20px;
+        font-size: 18px;
+        border-radius: 24px;
+    }
+    
+    .sample-text-btn {
+        min-height: 64px;
+        padding: 20px 16px;
+        font-size: 16px;
+        border-radius: 20px;
+        min-width: 100%;
+        margin-bottom: 12px;
+    }
+    
+    #text-input {
+        min-height: 72px;
+        padding: 24px 20px;
+        font-size: 18px;
+        border-radius: 24px;
+    }
+    
+    /* Adjust spacing for small screens */
+    #ui-overlay {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    #text-input-group {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+    
+    #text-samples {
+        gap: 12px;
+        margin: 20px 0;
+    }
+    
+    #controls {
+        gap: 12px;
+        padding: 0 2px;
+    }
+}
+
+/* ===== LANDSCAPE MOBILE OPTIMIZATIONS ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Optimize for landscape mode */
+    #ui-overlay {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    #status h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+    
+    #current-action {
+        padding: 10px 16px;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    #action-history {
+        margin: 10px 0;
+    }
+    
+    #action-history h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    #action-list {
+        max-height: 120px;
+    }
+    
+    #text-input-section {
+        margin: 10px 0;
+        padding: 16px;
+    }
+    
+    #text-input-section h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    
+    #text-input-group {
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    
+    #text-input {
+        padding: 16px 20px;
+        min-height: 56px;
+        font-size: 16px;
+    }
+    
+    #send-text-btn {
+        padding: 16px 20px;
+        min-height: 56px;
+        font-size: 16px;
+    }
+    
+    .sample-text-btn {
+        padding: 12px 16px;
+        min-height: 48px;
+        font-size: 14px;
+    }
+    
+    #controls button {
+        padding: 16px 20px;
+        min-height: 56px;
+        font-size: 16px;
+    }
+    
+    #controls {
+        gap: 12px;
+    }
+}
+
+/* ===== TOUCH GESTURE ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    /* Long press feedback */
+    button {
+        position: relative;
+    }
+    
+    button::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+    
+    button:active::after {
+        opacity: 1;
+    }
+    
+    /* Haptic feedback simulation */
+    button:active {
+        animation: hapticFeedback 0.1s ease;
+    }
+    
+    @keyframes hapticFeedback {
+        0% { transform: scale(1); }
+        50% { transform: scale(0.98); }
+        100% { transform: scale(1); }
+    }
+}
+
+/* ===== ACCESSIBILITY ENHANCEMENTS ===== */
+@media (max-width: 768px) {
+    /* Better focus indicators */
+    button:focus-visible {
+        outline: 3px solid rgba(102, 126, 234, 0.8);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.2);
+    }
+    
+    #text-input:focus-visible {
+        outline: 3px solid rgba(102, 126, 234, 0.8);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.2);
+    }
+    
+    /* High contrast mode improvements */
+    @media (prefers-contrast: high) {
+        button {
+            border: 3px solid #000;
+            background: #fff;
+            color: #000;
+        }
+        
+        #text-input {
+            border: 3px solid #000;
+            background: #fff;
+            color: #000;
+        }
+        
+        .sample-text-btn {
+            border: 3px solid #000;
+            background: #fff;
+            color: #000;
+        }
+    }
+    
+    /* Reduced motion improvements */
+    @media (prefers-reduced-motion: reduce) {
+        button, #text-input {
+            transition: none;
+            animation: none;
+        }
+        
+        button:hover, button:active {
+            transform: none;
+        }
+        
+        button::before, button::after {
+            display: none;
+        }
+        
+        #text-input:focus {
+            transform: none;
+        }
+    }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+@media (max-width: 768px) {
+    /* Optimize for mobile performance */
+    button {
+        contain: layout style paint;
+        will-change: transform, box-shadow;
+    }
+    
+    #text-input {
+        contain: layout style paint;
+        will-change: transform, border-color, box-shadow;
+    }
+    
+    /* Reduce repaints */
+    #ui-overlay {
+        contain: layout style paint;
+        will-change: transform, opacity;
+    }
+    
+    /* Smooth scrolling optimization */
+    #ui-overlay, #action-list {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        overscroll-behavior: contain;
+    }
+}
+
+/* ===== DARK MODE OPTIMIZATIONS ===== */
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+    /* Dark mode button styles */
+    button {
+        background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        color: #f9fafb;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    
+    button:hover {
+        background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+    
+    .sample-text-btn {
+        background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    }
+    
+    #send-text-btn {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+    
+    #mobile-ui-toggle {
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    }
+    
+    #mobile-ui-toggle.active {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    }
+}
