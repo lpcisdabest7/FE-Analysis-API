@@ -1,42 +1,19 @@
 {
   "name": "princess-3d-bot",
   "version": "1.0.0",
-  "description": "Interactive 3D Princess Action Bot with AI-powered animation control",
+  "description": "Interactive 3D Princess Action Bot",
   "main": "index.html",
   "scripts": {
-    "start": "http-server -p 8080 -c-1",
-    "dev": "http-server -p 8080 -c-1 -o",
     "build": "node build.js",
-    "serve": "npm run start",
-    "vercel-build": "npm run build",
-    "test": "echo 'No tests specified yet'",
-    "clean": "rm -rf env.js",
-    "setup": "npm install"
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel"
   },
-  "keywords": [
-    "3d",
-    "animation",
-    "three.js",
-    "ai",
-    "princess",
-    "bot",
-    "interactive",
-    "frontend"
-  ],
+  "keywords": ["3d", "animation", "three.js", "frontend"],
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "vercel": "latest"
   },
-  "dependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/princess-3d-bot.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/princess-3d-bot/issues"
-  },
-  "homepage": "https://princess-3d-bot.vercel.app",
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
